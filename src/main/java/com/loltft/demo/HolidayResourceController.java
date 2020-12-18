@@ -1,16 +1,8 @@
-//ten kod ssie kurwa pałe!!!
-
-//po pierwsze brak lambd
-// po drugie nie wykorzystujesz springa! a gdzie jakieś beany? jakieś autoviery?
-//brak testów
-
-
-
-
 package com.loltft.demo;
 
 import com.loltft.demo.dtos.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +17,9 @@ import java.util.*;
 
 @RestController
 public class HolidayResourceController {
+
+	@Value("${api-key}")
+	private String key;
 
 	private static final Logger log = LoggerFactory.getLogger(HolidayResourceApplication.class);
 
@@ -54,7 +49,7 @@ public class HolidayResourceController {
 		String month = String.valueOf(date.getMonth().getValue());
         params.put("month", month);
 		params.put("country", ""+countryName1+","+countryName2+"");
-		params.put("key", "73412c57-0443-4435-9348-ede1cd2b608f");
+		params.put("key", key);
 		params.put("year", year);
 		log.info("parameters:      "+ "country : "+ params.get("country")  + "     month :   " + params.get("month") + "         year "  + params.get("year")  );
 		ResponseEntity<HolidaysDtoDto> response = restTemplate.getForEntity(uri, HolidaysDtoDto.class, params);
