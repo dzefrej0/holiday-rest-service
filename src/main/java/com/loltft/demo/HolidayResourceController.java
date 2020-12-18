@@ -22,29 +22,10 @@ public class HolidayResourceController implements HolidayApiGateway{
 	@Autowired
 	private HolidayService holidayService;
 
-
-
 	private static final Logger log = LoggerFactory.getLogger(HolidayResourceApplication.class);
 
-//	@GetMapping("/get")
-//	public GetHolidayDto giveHolidayResponse(@RequestParam(value = "date", defaultValue = "20190101") String date,
-//			                                 @RequestParam(value = "countryOne", defaultValue = "pl") String countryOne,
-//			                                 @RequestParam(value = "countryTwo", defaultValue = "de") String countryTwo)  throws Exception{
-//
-//		RestTemplate restTemplate = new RestTemplate();
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//		LocalDate dateOutput = LocalDate.parse(date, formatter);
-//		GetHolidayDto holidayToReturn;
-//
-//		holidayToReturn = holidayService.getHolidayFromService(restTemplate, countryOne, countryTwo, dateOutput);
-//
-//		log.info("response should be:");
-//		log.info("date :  " +holidayToReturn.getDate() + ";  name1  "+ holidayToReturn.getName1()+ ";  name2  "+ holidayToReturn.getName2());
-//		return  holidayToReturn;
-//
-//	}
-
-	@Override public GetHolidayDto getHoliday(String date, String countryOne, String countryTwo) {
+	@Override
+	public GetHolidayDto getHoliday(String date, String countryOne, String countryTwo) {
 		RestTemplate restTemplate = new RestTemplate();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		LocalDate dateOutput = LocalDate.parse(date, formatter);
