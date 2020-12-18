@@ -1,26 +1,24 @@
 package com.loltft.demo;
 
 import com.loltft.demo.dtos.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 
 @RestController
 public class HolidayResourceController implements HolidayApiGateway{
 
-	@Autowired
 	private HolidayService holidayService;
+
+	@Autowired
+	public HolidayResourceController( HolidayService holidayService) {
+		this.holidayService = holidayService;
+	}
 
 	private static final Logger log = LoggerFactory.getLogger(HolidayResourceApplication.class);
 

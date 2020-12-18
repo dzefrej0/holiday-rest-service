@@ -37,18 +37,14 @@ public class HolidayService {
 		List<LocalDate> allDatesList = new ArrayList<>();
 
 		for (int i = 0; response.getBody().getHolidays().size()>i; i++) {
-			allDatesList.add( response.getBody().getHolidays().get(i).getDate());
-		}
+			allDatesList.add( response.getBody().getHolidays().get(i).getDate()); }
 
 		Map<LocalDate,String > dateCountryMap = new HashMap<>();
 		for (int i = 0; response.getBody().getHolidays().size()>i; i++) {
-			dateCountryMap.put(response.getBody().getHolidays().get(i).getDate(), response.getBody().getHolidays().get(i).getName());
-		}
+			dateCountryMap.put(response.getBody().getHolidays().get(i).getDate(), response.getBody().getHolidays().get(i).getName()); }
 
 		List <LocalDate> duplicatedDates = findDuplicates1(allDatesList);
-
 		Collections.sort(duplicatedDates, Comparator.comparing(obj -> obj.atStartOfDay()));
-
 		List<String> holidayListtoReturn = matchHolidayNames(dateCountryMap, duplicatedDates);
 		GetHolidayDto dto = new GetHolidayDto();
 
@@ -58,7 +54,6 @@ public class HolidayService {
 
 		return dto;
 	}
-
 
 	public List <LocalDate> findDuplicates1 (List <LocalDate> list) {
 
@@ -76,7 +71,6 @@ public class HolidayService {
 	public List<String> matchHolidayNames (Map<LocalDate,String > dateCountryMap, List <LocalDate> duplicatedDates){
 
 		List<String> holidayListtoReturn = new ArrayList<>();
-
 		holidayListtoReturn.add(0, dateCountryMap.get(duplicatedDates.get(0)));
 		holidayListtoReturn.add(1, dateCountryMap.get(duplicatedDates.get(0)));
 

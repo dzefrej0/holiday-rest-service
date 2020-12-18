@@ -7,6 +7,10 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GetHolidayDto {
 
+	private LocalDate date;
+	private String name1;
+	private String name2;
+
 	public LocalDate getDate() {
 		return date;
 	}
@@ -30,9 +34,4 @@ public class GetHolidayDto {
 	public void setName2(String name2) {
 		this.name2 = name2;
 	}
-
-	private LocalDate date;
-	private String name1;
-	private String name2;
-
 }
