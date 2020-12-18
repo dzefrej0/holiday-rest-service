@@ -2,6 +2,7 @@ package com.loltft.demo;
 
 import com.loltft.demo.dtos.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,10 @@ import java.util.*;
 @RestController
 public class HolidayResourceController {
 
-	@Value("${api-key}")
-	private String key;
+	@Autowired
+	private HolidayService holidayService;
+
+
 
 	private static final Logger log = LoggerFactory.getLogger(HolidayResourceApplication.class);
 
@@ -33,72 +36,15 @@ public class HolidayResourceController {
 		LocalDate dateOutput = LocalDate.parse(date, formatter);
 		GetHolidayDto holidayToReturn;
 
-		holidayToReturn=getHolidayFromService(restTemplate, countryOne, countryTwo, dateOutput);
+		holidayToReturn = holidayService.getHolidayFromService(restTemplate, countryOne, countryTwo, dateOutput);
+
 		log.info("response should be:");
 		log.info("date :  " +holidayToReturn.getDate() + ";  name1  "+ holidayToReturn.getName1()+ ";  name2  "+ holidayToReturn.getName2());
 		return  holidayToReturn;
 
 	}
 
-	public GetHolidayDto getHolidayFromService(RestTemplate restTemplate, String countryName1, String countryName2, LocalDate date) {
 
-		final String uri = "https://holidayapi.com/v1/holidays?key={key}&country={country}&year={year}&month={month}";
 
-		Map<String, String> params = new HashMap<>();
-		String year = String.valueOf(date.getYear());
-		String month = String.valueOf(date.getMonth().getValue());
-        params.put("month", month);
-		params.put("country", ""+countryName1+","+countryName2+"");
-		params.put("key", key);
-		params.put("year", year);
-		log.info("parameters:      "+ "country : "+ params.get("country")  + "     month :   " + params.get("month") + "         year "  + params.get("year")  );
-		ResponseEntity<HolidaysDtoDto> response = restTemplate.getForEntity(uri, HolidaysDtoDto.class, params);
 
-		List <LocalDate>allDatesList = new ArrayList<>();
-
-		for (int i = 0; response.getBody().getHolidays().size()>i; i++) {
-			allDatesList.add( response.getBody().getHolidays().get(i).getDate());
-		}
-
-		Map<LocalDate,String > dateCountryMap = new HashMap<>();
-		for (int i = 0; response.getBody().getHolidays().size()>i; i++) {
-			dateCountryMap.put(response.getBody().getHolidays().get(i).getDate(), response.getBody().getHolidays().get(i).getName());
-		}
-
-		List <LocalDate> duplicatedDates = findDuplicates1(allDatesList);
-
-		Collections.sort(duplicatedDates, Comparator.comparing(obj -> obj.atStartOfDay()));
-
-		List<String> holidayListtoReturn = matchHolidayNames(dateCountryMap, duplicatedDates);
-		GetHolidayDto dto = new GetHolidayDto();
-
-		dto.setDate(duplicatedDates.get(0));
-		dto.setName1(holidayListtoReturn.get(0));
-		dto.setName2(holidayListtoReturn.get(1));
-
-			return dto;
-		}
-
-	public List <LocalDate> findDuplicates1 (List <LocalDate> list) {
-
-		List <LocalDate> listoutput = new ArrayList<>();
-		for (int i = 0; i < list.size(); i++) {
-			for (int j = i + 1; j < list.size(); j++) {
-				if (list.get(i).equals(list.get(j))) {
-					listoutput.add(list.get(i));
-				}
-			}
-		}
-		return listoutput;
-	}
-
-	public List<String> matchHolidayNames (Map<LocalDate,String > dateCountryMap, List <LocalDate> duplicatedDates){
-
-		List<String> holidayListtoReturn = new ArrayList<>();
-
-		holidayListtoReturn.add(0, dateCountryMap.get(duplicatedDates.get(0)));
-		holidayListtoReturn.add(1, dateCountryMap.get(duplicatedDates.get(0)));
-
-		return holidayListtoReturn;
-	}
 }
